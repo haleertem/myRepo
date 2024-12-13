@@ -1,36 +1,36 @@
 #include <iostream>
-#include <cmath>    // sin() ve cos() gibi fonksiyonlar için
-#include <vector>   // Sinyali tutmak için
+#include <cmath>    // sin() ve cos() gibi fonksiyonlar iÃ§in
+#include <vector>   // Sinyali tutmak iÃ§in
 
 const double PI = 3.141592653589793;
-const int SAMPLE_SIZE = 100;  // Sinyal örnek sayýsý
-const double FREQUENCY = 1.0; // Sinüs dalgasýnýn frekansý (Hz)
-const double AMPLITUDE = 10.0; // Sinyalin genliði
+const int SAMPLE_SIZE = 100;  // Sinyal Ã¶rnek sayÄ±sÄ±
+const double FREQUENCY = 1.0; // SinÃ¼s dalgasÄ±nÄ±n frekansÄ± (Hz)
+const double AMPLITUDE = 10.0; // Sinyalin genliÄŸi
 const double MAX_DISTANCE = 100.0; // Maksimum mesafe (metre)
 
-// Sinyal üretme fonksiyonu
+// Sinyal Ã¼retme fonksiyonu
 std::vector<double> generateRadarSignal(double distance) {
     std::vector<double> signal(SAMPLE_SIZE);
     for (int i = 90; i < SAMPLE_SIZE; i++) {
-        double t = static_cast<double>(i) / SAMPLE_SIZE; // Zamaný normalleþtir
-        // Radar sinyali: mesafe ile frekans deðiþir (yaklaþýk bir model)
+        double t = static_cast<double>(i) / SAMPLE_SIZE; // ZamanÄ± normalleÃ¾tir
+        // Radar sinyali: mesafe ile frekans deÃ°iÃ¾ir (yaklaÃ¾Ã½k bir model)
         signal[i] = AMPLITUDE * sin(2 * PI * FREQUENCY * t + distance / MAX_DISTANCE);
     }
     return signal;
 }
 
-// Yansýyan sinyali hesaplama
+// YansÃ½yan sinyali hesaplama
 std::vector<double> calculateReflectedSignal(const std::vector<double>& signal, double distance) {
     std::vector<double> reflectedSignal(signal.size());
-    // Mesafeye baðlý olarak yansýyan sinyalin genliðini azaltma
-    double attenuation = exp(-distance / MAX_DISTANCE); // Basit zayýflama modeli
+    // Mesafeye baÃ°lÃ½ olarak yansÃ½yan sinyalin genliÃ°ini azaltma
+    double attenuation = exp(-distance / MAX_DISTANCE); // Basit zayÃ½flama modeli
     for (size_t i = 0; i < signal.size(); i++) {
         reflectedSignal[i] = signal[i] * attenuation;
     }
     return reflectedSignal;
 }
 
-// Sinyal ve yansýyan sinyalin yazdýrýlmasý
+// Sinyal ve yansÃ½yan sinyalin yazdÃ½rÃ½lmasÃ½
 void printSignals(const std::vector<double>& signal, const std::vector<double>& reflectedSignal) {
     std::cout << "Original Signal | Reflected Signal\n";
     for (size_t i = 0; i < signal.size(); i++) {
@@ -41,13 +41,13 @@ void printSignals(const std::vector<double>& signal, const std::vector<double>& 
 int main() {
     double targetDistance = 50.0;  // Hedefin mesafesi (metre)
 
-    // Radar sinyali üretme
+    // Radar sinyali Ã¼retme
     std::vector<double> radarSignal = generateRadarSignal(targetDistance);
 
-    // Yansýyan sinyali hesaplama
+    // YansÃ½yan sinyali hesaplama
     std::vector<double> reflectedSignal = calculateReflectedSignal(radarSignal, targetDistance);
 
-    // Sinyalleri yazdýr
+    // Sinyalleri yazdÃ½r
     printSignals(radarSignal, reflectedSignal);
 
     return 0;
